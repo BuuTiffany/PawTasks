@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General App Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="NavigationBarColor">#FFDAAE71</color>
+
+    <!-- Task Page Colors -->
+    <color name="TaskListTextColorBlack">#FF000000</color>
+    <color name="TaskViewBackgroundColor">#FFF9E8D0</color>
+    <color name="NewTaskButtonBackgroundColor">#FFFFFFFF</color>
+    <color name="CheckboxGreen">#FF34B233</color>
+
+    <!-- Gacha Page Colors -->
+    <color name="GachaPageTitleColorBlack">#FF000000</color>
+    <color name="GachaPageBackgroundColor">#FFF9E8D0</color>
+
+    <!-- Pet View Colors -->
+    <color name="PetViewPageTitleColorBlack">#FF000000</color>
+    <color name="PetPageBackgroundColor">#FFF9E8D0</color>
+
+</resources>

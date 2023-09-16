@@ -1,0 +1,19 @@
+<resources>
+    <!-- General App Strings -->
+    <string name="app_name">PawTasksDemo</string>
+
+    <!-- Task Page Strings -->
+    <string name="TaskPageTitle">Task List</string>
+    <string name="NewTaskButtonText">ADD TASK</string>
+    <string name="navigation_tasks_title">Tasks</string>
+
+    <!-- Gacha Page Strings -->
+    <string name="navigation_gacha_title">Gacha</string>
+    <string name="GatchaPageTitle">Gacha</string>
+
+    <!-- Pet View Page Strings -->
+    <string name="PetViewPageTitle">Pet View</string>
+    <string name="navigation_pet_title">Pet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
