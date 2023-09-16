@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tasks"
+        android:title="@string/navigation_tasks_title"
+        android:icon="@drawable/notepadnav"/>
+    <item
+        android:id="@+id/gacha"
+        android:title="@string/navigation_gacha_title"
+        android:icon="@drawable/gachamachine"/>
+    <item
+        android:id="@+id/pet"
+        android:title="@string/navigation_pet_title"
+        android:icon="@drawable/dognavicon"/>
+</menu>
