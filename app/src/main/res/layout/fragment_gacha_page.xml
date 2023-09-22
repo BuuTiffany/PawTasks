@@ -18,4 +18,41 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"/>
 
+    <Button
+        android:id="@+id/gachaPull_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:text="@string/GachaPullButtonText"
+        android:background="@color/GachaButtonBackColor"
+        android:textSize="35sp"
+        android:layout_marginTop="600dp"
+        android:layout_gravity="center_horizontal"
+        android:enabled="false"/>
+
+    <TextView
+        android:id="@+id/gachaTokenLabel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/GachaTokenLabelText"
+        android:textSize="35sp"
+        android:layout_marginTop="550dp"
+        android:layout_marginStart="105dp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/gachaTokenCount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="255dp"
+        android:layout_marginTop="550dp"
+        android:textSize="35sp" />
+
+    <Button
+        android:id="@+id/addTokens_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add" />
+
 </FrameLayout>

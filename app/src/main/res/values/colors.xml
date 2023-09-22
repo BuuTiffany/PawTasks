@@ -15,6 +15,9 @@
     <!-- Gacha Page Colors -->
     <color name="GachaPageTitleColorBlack">#FF000000</color>
     <color name="GachaPageBackgroundColor">#FFF9E8D0</color>
+    <color name="GachaButtonBackColor">#FFFFFFFF</color>
+    <color name="GachaButtonTextColor">#FF000000</color>
+    <color name="GachaTokenLabelTextColor">#FF000000</color>
 
     <!-- Pet View Colors -->
     <color name="PetViewPageTitleColorBlack">#FF000000</color>

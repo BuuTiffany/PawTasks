@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -23,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Fragments
+        TaskPage taskPage = new TaskPage();
+        GachaPage gachaPage = new GachaPage();
+        PetViewPage petViewPage = new PetViewPage();
+
+        // Set token count on gacha page
+        // NEED TO IMPLEMENT WAY OF SAVING DATA
+        //gachaPage.setTokenCount(user's token count);
+
         // Sets to TaskPage on app start
         replaceFragment(new TaskPage());
 
@@ -32,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
             if (id == R.id.tasks)
             {
-                replaceFragment(new TaskPage());
+                replaceFragment(taskPage);
             }
             else if (id == R.id.gacha)
             {
-                replaceFragment(new GachaPage());
+                replaceFragment(gachaPage);
             }
             else if (id == R.id.pet)
             {
-                replaceFragment(new PetViewPage());
+                replaceFragment(petViewPage);
             }
 
             return true;
