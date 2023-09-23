@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,11 +11,11 @@
         android:id="@+id/taskPageTitle_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/TaskPageTitle"
+        android:text="Your Task List"
         android:textColor="@color/TaskListTextColorBlack"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="100dp"
         android:layout_marginTop="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -26,4 +26,38 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:nestedScrollingEnabled="true"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:background="#CCCCCC"
+        android:layout_alignParentBottom="true">
+
+    <Button
+        android:id="@+id/addTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Add Task" />
+
+    <EditText
+        android:id="@+id/taskInputEditText"
+        android:layout_width="270dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="24dp"
+        android:layout_toEndOf="@+id/addTaskButton"
+        android:ems="10"
+        android:inputType="text"
+        android:background="@drawable/layout_boarder"
+        android:hint="New Task"
+        android:padding="5dp"
+        />
+</LinearLayout>
+
+</RelativeLayout>
