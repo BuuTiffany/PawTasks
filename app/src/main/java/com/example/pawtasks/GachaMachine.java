@@ -1,6 +1,11 @@
 package com.example.pawtasks;
 
+import android.app.Dialog;
+import android.view.Window;
+import android.widget.Button;
+
 import java.util.HashMap;
+import java.util.Random;
 
 enum Rarity {
     COMMON,
@@ -9,32 +14,27 @@ enum Rarity {
     LEGENDARY,
 }
 
-class Prize
-{
-    Prize(String _dogType,
-          String _name,
-          Rarity _rarity)
-    {
-        dogType = _dogType;
-        name    = _name;
-        rarity  = _rarity;
-    }
-    public String dogType;
-    public String name;
-    public Rarity rarity;
-}
-
 public class GachaMachine
 {
-    private int pityLevel;
-    private HashMap<Prize, Rarity> inventory;
     GachaMachine() { }
-    void addPrize(Prize _prize, Rarity _rarity)
+    Rarity pull()
     {
-        inventory.put(_prize, _rarity);
-    }
-    void pull()
-    {
+        Random rand = new Random();
+        double rarityCode = rand.nextInt(100);
+        double pityRatio = 0.10;
 
+        if (rarityCode > 95) {
+            // pick random Legendary
+            return Rarity.LEGENDARY;
+        } else if (rarityCode > 75) {
+            // pick random Epic
+            return Rarity.EPIC;
+        } else if (rarityCode > 50) {
+            // pick random Rare
+            return Rarity.RARE;
+        } else {
+            // pick random Common
+            return Rarity.COMMON;
+        }
     }
 }

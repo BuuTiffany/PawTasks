@@ -18,6 +18,14 @@
     <color name="GachaButtonBackColor">#FFFFFFFF</color>
     <color name="GachaButtonTextColor">#FF000000</color>
     <color name="GachaTokenLabelTextColor">#FF000000</color>
+    <color name="LegendaryDialogBackgroundColor">#FF000000</color>
+    <color name="LegendaryDialogTextColor">#FFFFFFFF</color>
+    <color name="EpicDialogBackgroundColor">#FF330066</color>
+    <color name="EpicDialogTextColor">#FF6600FF</color>
+    <color name="RareDialogBackgroundColor">#FFFA9C1B</color>
+    <color name="RareDialogTextColor">#FF7A3803</color>
+    <color name="CommonDialogBackgroundColor">#FF43ABC9</color>
+    <color name="CommonDialogTextColor">#FF093145</color>
 
     <!-- Pet View Colors -->
     <color name="PetViewPageTitleColorBlack">#FF000000</color>
