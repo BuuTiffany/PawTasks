@@ -1,12 +1,11 @@
 package com.example.pawtasks;
 
-//import com.example.pawtasks.GachaMachine;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,13 @@ import android.widget.TextView;
 import android.widget.Button;
 
 public class GachaPage extends Fragment implements View.OnClickListener {
+
+    private TextView tokenCountLabel;
+    private Button addTokenButton;
+    private Button pullButton;
+    private GachaMachine gachaMachine = new GachaMachine();
+
+    private PawTasksViewModel viewModel;
 
     public GachaPage() {
         // Required empty public constructor
@@ -27,6 +33,9 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View inf = inflater.inflate(R.layout.fragment_gacha_page, container, false);
 
+        // Get the tokenCount from the view model
+        viewModel = new ViewModelProvider(requireActivity()).get(PawTasksViewModel.class);
+
         // For adding tokens
         addTokenButton = (Button) inf.findViewById(R.id.addTokens_button);
         addTokenButton.setOnClickListener(this);
@@ -36,7 +45,7 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         pullButton.setOnClickListener(this);
 
         // Enable the Pull Button if tokenCount > 0
-        if (tokenCount > 0)
+        if (viewModel.getTokenCount() > 0)
         {
             pullButton.setEnabled(true);
         } else {
@@ -45,7 +54,7 @@ public class GachaPage extends Fragment implements View.OnClickListener {
 
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.gachaTokenCount_text);
-        tokenCountLabel.setText(String.valueOf(tokenCount));
+        tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
         return inf;
     }
@@ -56,10 +65,11 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         // Add token button click activity
         if (v.getId() == R.id.addTokens_button)
         {
-            tokenCountLabel.setText(String.valueOf(++tokenCount));
+            viewModel.incrementTokenCount();
+            tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
             // Check if tokenCount exceeds 0
-            if (tokenCount > 0)
+            if (viewModel.getTokenCount() > 0)
             {
                 pullButton.setEnabled(true);
             }
@@ -69,13 +79,13 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         else if (v.getId() == R.id.gachaPull_button)
         {
             // Pull from gacha machine if token count > 0
-            if (tokenCount > 0) {
-                tokenCountLabel.setText(String.valueOf(tokenCount - 1));
+            if (viewModel.getTokenCount() > 0) {
+                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount() - 1));
                 showPull(gachaMachine.pull());
-                tokenCount--;
+                viewModel.decrementTokenCount();
             }
             // Check if tokenCount becomes 0
-            if (tokenCount == 0)
+            if (viewModel.getTokenCount() == 0)
             {
                 pullButton.setEnabled(false);
             }
@@ -127,11 +137,5 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         // Show the popup
         dialog.show();
     }
-
-    int tokenCount = 9;
-    private TextView tokenCountLabel;
-    private Button addTokenButton;
-    private Button pullButton;
-    private GachaMachine gachaMachine = new GachaMachine();
 
 }

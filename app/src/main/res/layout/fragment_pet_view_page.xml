@@ -18,4 +18,78 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"/>
 
+    <ImageView
+        android:id="@+id/LegendaryDialogImage"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="75dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/legendarypuppy"/>
+
+    <TextView
+        android:id="@+id/petTokenLabel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/GachaTokenLabelText"
+        android:textSize="35sp"
+        android:layout_marginTop="400dp"
+        android:layout_marginStart="105dp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/petTokenCount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="255dp"
+        android:layout_marginTop="400dp"
+        android:textSize="35sp" />
+
+    <Button
+        android:id="@+id/walk_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/walkButtonText"
+        android:background="@color/PetViewButtonBackgroundColor"
+        android:textSize="35sp"
+        android:layout_marginTop="450dp"
+        android:enabled="true"/>
+
+    <Button
+        android:id="@+id/sitstand_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/sitButtonText"
+        android:background="@color/PetViewButtonBackgroundColor"
+        android:textSize="35sp"
+        android:layout_marginTop="550dp"
+        android:enabled="true"/>
+
+    <Button
+        android:id="@+id/feed_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="215dp"
+        android:text="@string/feedButtonText"
+        android:background="@color/PetViewButtonBackgroundColor"
+        android:textSize="35sp"
+        android:layout_marginTop="450dp"
+        android:enabled="true"/>
+
+    <Button
+        android:id="@+id/dance_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="215dp"
+        android:text="@string/danceButtonText"
+        android:background="@color/PetViewButtonBackgroundColor"
+        android:textSize="35sp"
+        android:layout_marginTop="550dp"
+        android:enabled="true"/>
+
 </FrameLayout>

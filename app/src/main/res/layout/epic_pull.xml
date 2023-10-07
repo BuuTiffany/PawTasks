@@ -22,7 +22,7 @@
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/violetepic"/>
+        android:src="@drawable/epicgolden"/>
 
     <Button
         android:id="@+id/EpicDialogButton"

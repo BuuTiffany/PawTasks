@@ -30,5 +30,7 @@
     <!-- Pet View Colors -->
     <color name="PetViewPageTitleColorBlack">#FF000000</color>
     <color name="PetPageBackgroundColor">#FFF9E8D0</color>
+    <color name="PetViewButtonBackgroundColor">#FFFFFFFF</color>
+    <color name="PetViewButtonTextColor">#FF000000</color>
 
 </resources>
