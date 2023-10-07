@@ -18,6 +18,10 @@ import android.widget.Button;
 public class PetViewPage extends Fragment implements View.OnClickListener {
 
     private TextView tokenCountLabel;
+    private Button walkButton;
+    private Button feedButton;
+    private Button danceButton;
+    private Button sitStandButton;
     private PawTasksViewModel viewModel;
 
     public PetViewPage() {
@@ -36,6 +40,16 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
         tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+
+        // Set buttons
+        walkButton = (Button) inf.findViewById(R.id.walk_button);
+        walkButton.setOnClickListener(this);
+        feedButton = (Button) inf.findViewById(R.id.feed_button);
+        feedButton.setOnClickListener(this);
+        danceButton = (Button) inf.findViewById(R.id.dance_button);
+        danceButton.setOnClickListener(this);
+        sitStandButton = (Button) inf.findViewById(R.id.sitstand_button);
+        sitStandButton.setOnClickListener(this);
 
         return inf;
     }
