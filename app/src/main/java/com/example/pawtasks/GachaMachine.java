@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.view.Window;
 import android.widget.Button;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class GachaMachine
@@ -40,16 +41,15 @@ public class GachaMachine
     Pet pull()
     {
         Random rand = new Random();
-        double rarityCode = rand.nextInt(100);
-        double pityRatio = 0.10;
+        double rarityCode = rand.nextInt(99);
 
-        if (rarityCode > 95) {
+        if (rarityCode < 5) { // 5% chance
             // pick random Legendary
             return legendaryPetIndex[rand.nextInt(legendaryPetIndex.length)];
-        } else if (rarityCode > 75) {
+        } else if (rarityCode < 25) { // 20% chance (25 - 5)
             // pick random Epic
             return epicPetIndex[rand.nextInt(epicPetIndex.length)];
-        } else if (rarityCode > 50) {
+        } else if (rarityCode < 65) { // 40% chance (65 - 25)
             // pick random Rare
             return rarePetIndex[rand.nextInt(rarePetIndex.length)];
         } else {
