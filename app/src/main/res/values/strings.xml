@@ -10,10 +10,22 @@
     <!-- Gacha Page Strings -->
     <string name="navigation_gacha_title">Gacha</string>
     <string name="GatchaPageTitle">Gacha</string>
+    <string name="GachaPullButtonText">PULL</string>
+    <string name="GachaTokenLabelText">TOKENS:</string>
+    <string name="legendaryPullDialogTitle">LEGENDARY</string>
+    <string name="epicPullDialogTitle">EPIC</string>
+    <string name="rarePullDialogTitle">RARE</string>
+    <string name="commonPullDialogTitle">COMMON</string>
+    <string name="commonDialogButtonText">OK</string>
 
     <!-- Pet View Page Strings -->
     <string name="PetViewPageTitle">Pet View</string>
     <string name="navigation_pet_title">Pet</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="PetTokenLabelText">TOKENS:</string>
+    <string name="feedButtonText">FEED</string>
+    <string name="standButtonText">STAND</string>
+    <string name="sitButtonText">SIT</string>
+    <string name="walkButtonText">WALK</string>
+    <string name="danceButtonText">DANCE</string>
+
 </resources>
