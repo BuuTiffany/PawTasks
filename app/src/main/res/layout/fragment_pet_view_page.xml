@@ -52,9 +52,9 @@
         android:layout_marginEnd="25dp"
         android:text="@string/walkButtonText"
         android:background="@color/PetViewButtonBackgroundColor"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:layout_marginTop="450dp"
-        android:enabled="true"/>
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/sitstand_button"
@@ -64,7 +64,7 @@
         android:layout_marginEnd="25dp"
         android:text="@string/sitButtonText"
         android:background="@color/PetViewButtonBackgroundColor"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:layout_marginTop="550dp"
         android:enabled="true"/>
 
@@ -76,9 +76,9 @@
         android:layout_marginEnd="215dp"
         android:text="@string/feedButtonText"
         android:background="@color/PetViewButtonBackgroundColor"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:layout_marginTop="450dp"
-        android:enabled="true"/>
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/dance_button"
@@ -88,8 +88,8 @@
         android:layout_marginEnd="215dp"
         android:text="@string/danceButtonText"
         android:background="@color/PetViewButtonBackgroundColor"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:layout_marginTop="550dp"
-        android:enabled="true"/>
+        android:enabled="false"/>
 
 </FrameLayout>

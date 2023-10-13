@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 
@@ -20,7 +21,6 @@ public class GachaPage extends Fragment implements View.OnClickListener {
     private Button addTokenButton;
     private Button pullButton;
     private GachaMachine gachaMachine = new GachaMachine();
-
     private PawTasksViewModel viewModel;
 
     public GachaPage() {
@@ -92,35 +92,52 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void showPull(Rarity rarity) {
+    private void showPull(Pet pet) {
         Context context = requireContext();
         final Dialog dialog = new Dialog(context);
+        ImageView petImageView;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
 
         Button okButton;
 
         // Determine which layout we need to look at
-        switch (rarity)
+        switch (pet.getRarity())
         {
             case COMMON:
                 dialog.setContentView(R.layout.common_pull);
                 okButton = dialog.findViewById(R.id.CommonDialogButton);
+
+                // Set the image in the popup
+                petImageView = dialog.findViewById(R.id.DialogImage);
+                petImageView.setImageResource(pet.getImageResourceId());
                 break;
 
             case RARE:
                 dialog.setContentView(R.layout.rare_pull);
                 okButton = dialog.findViewById(R.id.RareDialogButton);
+
+                // Set the image in the popup
+                petImageView = dialog.findViewById(R.id.DialogImage);
+                petImageView.setImageResource(pet.getImageResourceId());
                 break;
 
             case EPIC:
                 dialog.setContentView(R.layout.epic_pull);
                 okButton = dialog.findViewById(R.id.EpicDialogButton);
+
+                // Set the image in the popup
+                petImageView = dialog.findViewById(R.id.DialogImage);
+                petImageView.setImageResource(pet.getImageResourceId());
                 break;
 
             case LEGENDARY:
                 dialog.setContentView(R.layout.legendary_pull);
                 okButton = dialog.findViewById(R.id.LegendaryDialogButton);
+
+                // Set the image in the popup
+                petImageView = dialog.findViewById(R.id.DialogImage);
+                petImageView.setImageResource(pet.getImageResourceId());
                 break;
 
             default:

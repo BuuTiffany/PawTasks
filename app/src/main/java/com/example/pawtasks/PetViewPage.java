@@ -51,40 +51,72 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         sitStandButton = (Button) inf.findViewById(R.id.sitstand_button);
         sitStandButton.setOnClickListener(this);
 
+        // Buttons are only clickable if the user has tokens
+        if (viewModel.getTokenCount() != 0)
+        {
+            walkButton.setEnabled(true);
+            danceButton.setEnabled(true);
+            feedButton.setEnabled(true);
+        }
+
+        // Set TokenCount label
+        tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
+        tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+
         return inf;
     }
 
     @Override
     public void onClick(View v)
     {
+        boolean noTokens = (viewModel.getTokenCount() == 0);
+
         // Feed button
         if(v.getId() == R.id.feed_button)
         {
-            if (viewModel.getTokenCount() > 0) {
+            if (!noTokens) {
                 viewModel.decrementTokenCount();
+                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+                noTokens = (viewModel.getTokenCount() == 0);
             }
         }
 
         // Walk button
         else if (v.getId() == R.id.walk_button)
         {
-            if (viewModel.getTokenCount() > 0) {
+            if (!noTokens) {
                 viewModel.decrementTokenCount();
+                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+                noTokens = (viewModel.getTokenCount() == 0);
             }
         }
 
         // Dance button
         else if (v.getId() == R.id.dance_button)
         {
-            if (viewModel.getTokenCount() > 0) {
+            if (!noTokens) {
                 viewModel.decrementTokenCount();
+                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+                noTokens = (viewModel.getTokenCount() == 0);
             }
         }
 
         // Sit/Stand button
         else if (v.getId() == R.id.sitstand_button)
         {
+            if (sitStandButton.getText() == getString(R.string.sitButtonText))
+            {
+                sitStandButton.setText(R.string.standButtonText);
+            } else {
+                sitStandButton.setText(R.string.sitButtonText);
+            }
+        }
 
+        if (noTokens)
+        {
+            walkButton.setEnabled(false);
+            danceButton.setEnabled(false);
+            feedButton.setEnabled(false);
         }
     }
 }
