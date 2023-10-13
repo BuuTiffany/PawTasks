@@ -81,7 +81,9 @@ public class GachaPage extends Fragment implements View.OnClickListener {
             // Pull from gacha machine if token count > 0
             if (viewModel.getTokenCount() > 0) {
                 tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount() - 1));
-                showPull(gachaMachine.pull());
+                Pet adoptedPet = gachaMachine.pull();
+                showPull(adoptedPet);
+                viewModel.addPet(adoptedPet);
                 viewModel.decrementTokenCount();
             }
             // Check if tokenCount becomes 0

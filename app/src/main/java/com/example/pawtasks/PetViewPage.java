@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 
@@ -23,6 +24,8 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
     private Button danceButton;
     private Button sitStandButton;
     private PawTasksViewModel viewModel;
+    private ImageView currentPetImage;
+    private Pet currentPet;
 
     public PetViewPage() {
         // Required empty public constructor
@@ -41,6 +44,13 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
         tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
+        // Set image view
+        currentPet = viewModel.getFirstPet();
+        if (currentPet != null) {
+            currentPetImage = inf.findViewById(R.id.currentPetImage);
+            currentPetImage.setImageResource(currentPet.getImageResourceId());
+        }
+
         // Set buttons
         walkButton = (Button) inf.findViewById(R.id.walk_button);
         walkButton.setOnClickListener(this);
@@ -52,11 +62,12 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         sitStandButton.setOnClickListener(this);
 
         // Buttons are only clickable if the user has tokens
-        if (viewModel.getTokenCount() != 0)
+        if (viewModel.getTokenCount() != 0 && currentPet != null)
         {
             walkButton.setEnabled(true);
             danceButton.setEnabled(true);
             feedButton.setEnabled(true);
+            sitStandButton.setEnabled(true);
         }
 
         // Set TokenCount label
