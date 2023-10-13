@@ -18,6 +18,17 @@ public class Pet {
         this.imageResourceId = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        Pet pet = (Pet) o;
+
+        return  petName.equals(pet.petName) &&
+                rarity.equals(pet.rarity) &&
+                imageResourceId == pet.imageResourceId;
+    }
+
     public String getPetName() {
         return petName;
     }

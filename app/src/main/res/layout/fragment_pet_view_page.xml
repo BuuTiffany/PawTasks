@@ -19,12 +19,11 @@
         android:layout_marginTop="16dp"/>
 
     <ImageView
-        android:id="@+id/LegendaryDialogImage"
+        android:id="@+id/currentPetImage"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_marginTop="75dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/legendarypuppy"/>
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/petTokenLabel_text"
@@ -66,7 +65,7 @@
         android:background="@color/PetViewButtonBackgroundColor"
         android:textSize="25sp"
         android:layout_marginTop="550dp"
-        android:enabled="true"/>
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/feed_button"
