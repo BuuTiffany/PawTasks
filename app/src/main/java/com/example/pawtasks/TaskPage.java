@@ -1,6 +1,7 @@
 package com.example.pawtasks;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,12 +13,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -39,7 +42,7 @@ public class TaskPage extends Fragment {
 
         public Task(String title) {
             this.title = title;
-            this.timeRemaining = 24 * 60 * 60 * 1000;
+            this.timeRemaining = timeUntilEndOfDay();
             this.timer = new CountDownTimer(this.timeRemaining, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -63,6 +66,16 @@ public class TaskPage extends Fragment {
 
         public void setTimeRemaining(long timeRemaining) {
             this.timeRemaining = timeRemaining;
+        }
+
+        private long timeUntilEndOfDay() {
+            Calendar current = Calendar.getInstance();
+            Calendar endOfDay = (Calendar) current.clone();
+            endOfDay.set(Calendar.HOUR_OF_DAY, 23);
+            endOfDay.set(Calendar.MINUTE, 59);
+            endOfDay.set(Calendar.SECOND, 59);
+            endOfDay.set(Calendar.MILLISECOND, 999);
+            return endOfDay.getTimeInMillis() - current.getTimeInMillis();
         }
     }
 
@@ -91,6 +104,28 @@ public class TaskPage extends Fragment {
                     taskAdapter.notifyDataSetChanged();
                     taskInputEditText.setText("");
                 }
+            }
+        });
+
+        ImageView calendarButton = view.findViewById(R.id.menu_icon);
+        calendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Initialize the DatePickerDialog and show it
+                Calendar c = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            // You can handle the selected date here.
+                            // For instance, you can set it to a TextView or use it elsewhere.
+                            String selectedDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                            // yourTextView.setText(selectedDate);
+                        },
+                        c.get(Calendar.YEAR),
+                        c.get(Calendar.MONTH),
+                        c.get(Calendar.DAY_OF_MONTH)
+                );
+                datePickerDialog.show();
             }
         });
 
@@ -191,20 +226,7 @@ public class TaskPage extends Fragment {
                 }
             });
             long timeRemaining = tasks.get(position).getTimeRemaining();
-            CountDownTimer timer = new CountDownTimer(timeRemaining, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    tasks.get(position).setTimeRemaining(millisUntilFinished);
-                    holder.timerText.setText(formatTime(millisUntilFinished));
-                }
-
-                @Override
-                public void onFinish() {
-                    holder.timerText.setText("00:00");
-                    // Handle timer finish, if necessary
-                }
-            };
-            timer.start();
+            holder.timerText.setText(formatTime(timeRemaining));
         }
 
         private String formatTime(long millis) {
