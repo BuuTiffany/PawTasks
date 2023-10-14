@@ -5,28 +5,76 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/TaskViewBackgroundColor"
-    tools:context=".TaskPage">
+    tools:context=".TaskPage"
+    >
 
-    <TextView
-        android:id="@+id/taskPageTitle_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your Task List"
-        android:textColor="@color/TaskListTextColorBlack"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@color/white">
+
+        <!-- PawTasks TextView -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="PawTasks"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="start"/>
+
+
+        <ImageView
+            android:id="@+id/menu_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/menu"
+            android:layout_marginEnd="8dp"
+            />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksView_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
+        android:layout_marginBottom="75dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:nestedScrollingEnabled="true"
         android:layout_marginBottom="60dp"
         />
+
+    <TextView
+        android:id="@+id/pointsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points: 0"
+        android:background="@drawable/layout_boarder"
+        android:padding = "10dp"
+        android:backgroundTint="@color/pointsContainer"
+        android:textColor="@color/pointsColor"
+        android:textSize="18sp"
+        android:layout_below="@+id/tasksView_recyclerView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/pointsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points: 0"
+        android:background="@drawable/layout_boarder"
+        android:padding = "10dp"
+        android:backgroundTint="@color/pointsContainer"
+        android:textColor="@color/pointsColor"
+        android:textSize="18sp"
+        android:layout_below="@+id/tasksView_recyclerView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,8 +90,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Add Task" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:backgroundTint="@color/AddButton"
+        android:textColor="@color/black"
+        android:text="Add Task"/>
 
     <EditText
         android:id="@+id/taskInputEditText"
@@ -53,6 +104,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="13dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/addTaskButton"
         android:ems="10"
         android:inputType="text"

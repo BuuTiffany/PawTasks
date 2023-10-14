@@ -10,7 +10,14 @@
     <color name="TaskListTextColorBlack">#FF000000</color>
     <color name="TaskViewBackgroundColor">#FFF9E8D0</color>
     <color name="NewTaskButtonBackgroundColor">#FFFFFFFF</color>
-    <color name="CheckboxGreen">#FF34B233</color>
+    <color name="CheckboxGreen">#3D974E</color>
+    <color name="DeleteButton">#B6622E</color>
+    <color name="UnfinishedTask">#F3490E</color>
+    <color name="AddButton">#5FB152</color>
+    <color name="pointsContainer">#7D28B4</color>
+    <color name="pointsColor">#C2D821</color>
+    <color name="custom_green">#3D974E</color>
+    <color name="custom_red">#CE2F19</color>
 
     <!-- Gacha Page Colors -->
     <color name="GachaPageTitleColorBlack">#FF000000</color>
