@@ -42,25 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
-        android:layout_marginBottom="75dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:nestedScrollingEnabled="true"
         android:layout_marginBottom="60dp"
         />
-
-    <TextView
-        android:id="@+id/pointsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Points: 0"
-        android:background="@drawable/layout_boarder"
-        android:padding = "10dp"
-        android:backgroundTint="@color/pointsContainer"
-        android:textColor="@color/pointsColor"
-        android:textSize="18sp"
-        android:layout_below="@+id/tasksView_recyclerView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"/>
 
     <TextView
         android:id="@+id/pointsTextView"
