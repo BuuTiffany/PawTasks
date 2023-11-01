@@ -3,9 +3,11 @@ package com.example.pawtasks;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +22,20 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.model.Model;
+
 import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+
+import com.amplifyframework.core.model.query.Where;
+import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.api.graphql.GraphQLRequest;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.SimpleGraphQLRequest;
 
 public class TaskPage extends Fragment {
 
@@ -33,50 +44,6 @@ public class TaskPage extends Fragment {
     private List<Task> taskList;
     public TaskPage() {
         // Required empty public constructor
-    }
-
-    public static class Task {
-        private String title;
-        private long timeRemaining;
-        public CountDownTimer timer;
-
-        public Task(String title) {
-            this.title = title;
-            this.timeRemaining = timeUntilEndOfDay();
-            this.timer = new CountDownTimer(this.timeRemaining, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timeRemaining = millisUntilFinished;
-                    // Update UI or do something else if necessary
-                }
-
-                @Override
-                public void onFinish() {
-                    // Handle timer finish if necessary
-                }
-            }.start();
-        }
-
-        public String getTitle() {
-            return title;
-        }
-        public long getTimeRemaining() {
-            return timeRemaining;
-        }
-
-        public void setTimeRemaining(long timeRemaining) {
-            this.timeRemaining = timeRemaining;
-        }
-
-        private long timeUntilEndOfDay() {
-            Calendar current = Calendar.getInstance();
-            Calendar endOfDay = (Calendar) current.clone();
-            endOfDay.set(Calendar.HOUR_OF_DAY, 23);
-            endOfDay.set(Calendar.MINUTE, 59);
-            endOfDay.set(Calendar.SECOND, 59);
-            endOfDay.set(Calendar.MILLISECOND, 999);
-            return endOfDay.getTimeInMillis() - current.getTimeInMillis();
-        }
     }
 
     @Override
@@ -95,15 +62,43 @@ public class TaskPage extends Fragment {
         final EditText taskInputEditText = view.findViewById(R.id.taskInputEditText);
         Button addTaskButton = view.findViewById(R.id.addTaskButton);
 
-        addTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newTaskTitle = taskInputEditText.getText().toString();
-                if (!newTaskTitle.isEmpty()) {
-                    taskList.add(new Task(newTaskTitle));
-                    taskAdapter.notifyDataSetChanged();
-                    taskInputEditText.setText("");
-                }
+        addTaskButton.setOnClickListener(v -> {
+            String newTaskTitle = taskInputEditText.getText().toString();
+            if (!newTaskTitle.isEmpty()) {
+                Amplify.Auth.getCurrentUser(
+                        currentUser -> {
+                            if (currentUser != null) {
+                                String userId = currentUser.getUserId();
+                                Task newTask = Task.builder()
+                                        .userId(userId)
+                                        .title(newTaskTitle)
+                                        .checked(false)
+                                        .finishByTime("someTime")  // Set this based on your requirements
+                                        .date("someDate")          // Set this based on your requirements
+                                        .build();
+
+                                GraphQLRequest<Task> request = ModelMutation.create(newTask);
+
+                                Amplify.API.mutate(
+                                        request,
+                                        response -> {
+                                            Log.i("MyAmplifyApp", "Task created with id: " + response.getData().getId());
+                                            if (isAdded()) { // Check if the fragment is currently added to its activity
+                                                getActivity().runOnUiThread(() -> {
+                                                    taskList.add(newTask);
+                                                    taskAdapter.notifyDataSetChanged();
+                                                    taskInputEditText.setText("");
+                                                });
+                                            }
+                                        },
+                                        error -> Log.e("MyAmplifyApp", "Save failed", error)
+                                );
+                            } else {
+                                Log.e("MyAmplifyApp", "User not signed in");
+                            }
+                        },
+                        error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+                );
             }
         });
 
@@ -128,8 +123,58 @@ public class TaskPage extends Fragment {
                 datePickerDialog.show();
             }
         });
+        ImageView signOutIcon = view.findViewById(R.id.signout_icon);
+        signOutIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Amplify.Auth.signOut(
+                        // Success callback
+                        result -> {
+                            Log.i("AuthQuickstart", "Signed out successfully: " + result.toString());
+                            Intent intent = new Intent(getActivity(), SignInActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                );
+            }
+        });
 
+        queryTasks();
         return view;
+    }
+    private void queryTasks() {
+        Amplify.Auth.getCurrentUser(
+                currentUser -> {
+                    if (currentUser != null) {
+                        String userId = currentUser.getUserId();
+                        Amplify.API.query(
+                                ModelQuery.list(Task.class, Task.USER_ID.eq(userId)),
+                                response -> {
+                                    if (response.getData() != null) {
+                                        if (isAdded()) {  // Check if the fragment is currently added to its activity
+                                            getActivity().runOnUiThread(() -> {
+                                                taskList.clear();
+                                                for (Task task : response.getData()) {
+                                                    taskList.add(task);
+                                                }
+                                                taskAdapter.notifyDataSetChanged();
+                                            });
+                                        } else {
+                                            Log.e("MyAmplifyApp", "Fragment is not attached to an Activity. Skipping UI update.");
+                                        }
+                                    }
+                                    if (response.getErrors() != null && !response.getErrors().isEmpty()) {
+                                        Log.e("MyAmplifyApp", "Error fetching tasks: " + response.getErrors());
+                                    }
+                                },
+                                error -> Log.e("MyAmplifyApp", "Query failed", error)
+                        );
+                    } else {
+                        Log.e("MyAmplifyApp", "Current user is null");
+                    }
+                },
+                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+        );
     }
     public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
@@ -147,7 +192,6 @@ public class TaskPage extends Fragment {
             Button deleteButton;
             CheckBox checkBox;
             View itemView;
-            TextView timerText;
 
             public TaskViewHolder(View itemView) {
                 super(itemView);
@@ -155,7 +199,6 @@ public class TaskPage extends Fragment {
                 title = itemView.findViewById(R.id.taskTitle_text);
                 deleteButton = itemView.findViewById(R.id.deleteTaskButton);
                 checkBox = itemView.findViewById(R.id.checkBox);
-                timerText = itemView.findViewById(R.id.timer_text);
             }
         }
 
@@ -175,35 +218,43 @@ public class TaskPage extends Fragment {
                     int currentPosition = holder.getBindingAdapterPosition();
                     if (currentPosition != RecyclerView.NO_POSITION) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                        LayoutInflater inflater = LayoutInflater.from(v.getContext());
-                        View view = inflater.inflate(R.layout.custom_alert, null);
-                        builder.setView(view);
+                        builder.setTitle("Delete Task");  // Set the dialog title
+                        builder.setMessage("Are you sure you want to delete this task?");  // Set the dialog message
 
                         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                // User clicked Delete button
-                                tasks.remove(currentPosition);
-                                notifyItemRemoved(currentPosition);
-                                notifyItemRangeChanged(currentPosition, tasks.size());
+                                // Perform the delete operation with Amplify
+                                Task taskToDelete = tasks.get(currentPosition);
+                                Amplify.API.mutate(ModelMutation.delete(taskToDelete),
+                                        response -> {
+                                            Log.i("MyAmplifyApp", "Delete succeeded: " + taskToDelete);
+
+                                            // Update UI on the main thread
+                                            getActivity().runOnUiThread(() -> {
+                                                tasks.remove(currentPosition);
+                                                notifyItemRemoved(currentPosition);
+                                            });
+                                        },
+                                        error -> {
+                                            Log.e("MyAmplifyApp", "Delete failed", error);
+                                        }
+                                );
                             }
                         });
+
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                // User cancelled the dialog, do nothing
+                                // User cancelled the dialog, just dismiss it
+                                dialog.dismiss();
                             }
                         });
 
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-
-                        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-
-                        positiveButton.setTextColor(getResources().getColor(R.color.custom_red));
-                        negativeButton.setTextColor(getResources().getColor(R.color.custom_green));
+                        builder.show();  // Show the dialog
                     }
                 }
             });
+
+
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 int checkboxGreen = getResources().getColor(R.color.CheckboxGreen, null);
                 int unFinishedTask = getResources().getColor(R.color.UnfinishedTask);
@@ -216,23 +267,12 @@ public class TaskPage extends Fragment {
                         buttonView.setClickable(false);
                         pointsValue++;
                         pointsTextView.setText("Points: " + pointsValue);
-                        if (tasks.get(position).timer != null) {
-                            tasks.get(position).timer.cancel();
-                        }
                     } else {
                         // Reset background color when unchecked
                         innerLayout.setBackgroundColor(unFinishedTask);
                     }
                 }
             });
-            long timeRemaining = tasks.get(position).getTimeRemaining();
-            holder.timerText.setText(formatTime(timeRemaining));
-        }
-
-        private String formatTime(long millis) {
-            long hours = TimeUnit.MILLISECONDS.toHours(millis);
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
-            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
         }
 
         @Override
