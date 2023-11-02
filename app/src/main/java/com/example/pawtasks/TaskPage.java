@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
@@ -36,12 +37,16 @@ import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.api.graphql.GraphQLRequest;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest;
+import com.amplifyframework.datastore.generated.model.User;
 
 public class TaskPage extends Fragment {
 
     private RecyclerView tasksView;
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
+    private int pointsValue = 0;
+    private TextView pointsTextView;
+    private int userTokens = 0;
     public TaskPage() {
         // Required empty public constructor
     }
@@ -51,11 +56,11 @@ public class TaskPage extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_page, container, false);
+        pointsTextView = view.findViewById(R.id.pointsTextView);
         tasksView = view.findViewById(R.id.tasksView_recyclerView);
         taskList = new ArrayList<>();
-        TextView pointsTextView = view.findViewById(R.id.pointsTextView);
 
-        taskAdapter = new TaskAdapter(taskList, pointsTextView);
+        taskAdapter = new TaskAdapter(taskList, pointsTextView, this);
         tasksView.setAdapter(taskAdapter);
 
 
@@ -139,6 +144,17 @@ public class TaskPage extends Fragment {
             }
         });
 
+        ImageView refreshIcon = view.findViewById(R.id.refresh_icon);
+        refreshIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the method that requeries tasks and points
+                queryCurrentUser();
+                queryTasks();
+            }
+        });
+
+        queryCurrentUser();
         queryTasks();
         return view;
     }
@@ -147,27 +163,34 @@ public class TaskPage extends Fragment {
                 currentUser -> {
                     if (currentUser != null) {
                         String userId = currentUser.getUserId();
+
                         Amplify.API.query(
                                 ModelQuery.list(Task.class, Task.USER_ID.eq(userId)),
-                                response -> {
-                                    if (response.getData() != null) {
-                                        if (isAdded()) {  // Check if the fragment is currently added to its activity
+                                taskResponse -> {
+                                    if (taskResponse.getData() != null) {
+                                        List<Task> newTasks = new ArrayList<>();
+                                        if (taskResponse.getData() != null) {
+                                            for (Task task : taskResponse.getData()) {
+                                                newTasks.add(task);
+                                            }
+                                        }
+                                        TaskDiffCallback diffCallback = new TaskDiffCallback(taskList, newTasks);
+                                        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+                                        // Update the task list and notify the adapter on the main thread
+                                        if (isAdded()) {
                                             getActivity().runOnUiThread(() -> {
                                                 taskList.clear();
-                                                for (Task task : response.getData()) {
-                                                    taskList.add(task);
-                                                }
-                                                taskAdapter.notifyDataSetChanged();
+                                                taskList.addAll(newTasks);
+                                                diffResult.dispatchUpdatesTo(taskAdapter);
                                             });
-                                        } else {
-                                            Log.e("MyAmplifyApp", "Fragment is not attached to an Activity. Skipping UI update.");
                                         }
                                     }
-                                    if (response.getErrors() != null && !response.getErrors().isEmpty()) {
-                                        Log.e("MyAmplifyApp", "Error fetching tasks: " + response.getErrors());
+                                    if (taskResponse.getErrors() != null && !taskResponse.getErrors().isEmpty()) {
+                                        Log.e("MyAmplifyApp", "Error fetching tasks: " + taskResponse.getErrors());
                                     }
                                 },
-                                error -> Log.e("MyAmplifyApp", "Query failed", error)
+                                taskError -> Log.e("MyAmplifyApp", "Query for tasks failed", taskError)
                         );
                     } else {
                         Log.e("MyAmplifyApp", "Current user is null");
@@ -176,15 +199,73 @@ public class TaskPage extends Fragment {
                 error -> Log.e("MyAmplifyApp", "Get current user failed", error)
         );
     }
+
+    private void queryCurrentUser() {
+        Amplify.Auth.getCurrentUser(
+                currentUser -> {
+                    if (currentUser != null) {
+                        String userId = currentUser.getUserId();
+                        Amplify.API.query(
+                                ModelQuery.get(User.class, userId),
+                                response -> {
+                                    if (response.getData() != null) {
+                                        User user = response.getData();
+                                        userTokens = user.getTokens() != null ? user.getTokens() : 0;
+                                        if (isAdded()) { // Check if the fragment is currently added to its activity
+                                            getActivity().runOnUiThread(() -> {
+                                                pointsTextView.setText("Tokens: " + userTokens);
+                                            });
+                                        }
+                                    }
+                                },
+                                error -> Log.e("MyAmplifyApp", "Query failed", error)
+                        );
+                    }
+                },
+                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+        );
+    }
+    public class TaskDiffCallback extends DiffUtil.Callback {
+
+        private final List<Task> oldTasks;
+        private final List<Task> newTasks;
+
+        public TaskDiffCallback(List<Task> oldTasks, List<Task> newTasks) {
+            this.oldTasks = oldTasks;
+            this.newTasks = newTasks;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldTasks.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newTasks.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldTasks.get(oldItemPosition).getId().equals(newTasks.get(newItemPosition).getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldTasks.get(oldItemPosition).equals(newTasks.get(newItemPosition));
+        }
+    }
     public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
         private List<Task> tasks;
         private TextView pointsTextView;
+        private TaskPage taskPage;
         int pointsValue = 0; // variable to keep track of points
 
-        public TaskAdapter(List<Task> tasks,TextView pointsTextView) {
+        public TaskAdapter(List<Task> tasks,TextView pointsTextView, TaskPage taskPage) {
             this.tasks = tasks;
             this.pointsTextView = pointsTextView;
+            this.taskPage = taskPage;
         }
 
         public class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -192,6 +273,9 @@ public class TaskPage extends Fragment {
             Button deleteButton;
             CheckBox checkBox;
             View itemView;
+            LinearLayout innerLayout;
+            int checkboxGreen;
+            int unFinishedTask;
 
             public TaskViewHolder(View itemView) {
                 super(itemView);
@@ -199,6 +283,9 @@ public class TaskPage extends Fragment {
                 title = itemView.findViewById(R.id.taskTitle_text);
                 deleteButton = itemView.findViewById(R.id.deleteTaskButton);
                 checkBox = itemView.findViewById(R.id.checkBox);
+                innerLayout = itemView.findViewById(R.id.innerLayout);
+                checkboxGreen = itemView.getContext().getResources().getColor(R.color.CheckboxGreen, null);
+                unFinishedTask = itemView.getContext().getResources().getColor(R.color.UnfinishedTask);
             }
         }
 
@@ -210,7 +297,17 @@ public class TaskPage extends Fragment {
 
         @Override
         public void onBindViewHolder(TaskViewHolder holder, int position) {
+            Task currentTask = tasks.get(position);
             holder.title.setText(tasks.get(position).getTitle());
+            holder.checkBox.setChecked(currentTask.getChecked());
+            if (currentTask.getChecked()) {
+                holder.innerLayout.setBackgroundColor(holder.checkboxGreen);
+                holder.checkBox.setClickable(false); // If task is already checked, make checkbox not clickable
+                taskPage.pointsValue++;
+                pointsTextView.setText("Tokens: " + pointsValue);// Assuming you want to increase points for already checked tasks when first loading
+            } else {
+                holder.innerLayout.setBackgroundColor(holder.unFinishedTask);
+            }
 
             holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -255,21 +352,69 @@ public class TaskPage extends Fragment {
             });
 
 
-            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                int checkboxGreen = getResources().getColor(R.color.CheckboxGreen, null);
-                int unFinishedTask = getResources().getColor(R.color.UnfinishedTask);
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    LinearLayout innerLayout = holder.itemView.findViewById(R.id.innerLayout);
-                    if (isChecked) {
-                        // Change background color when checked
-                        innerLayout.setBackgroundColor(checkboxGreen);
-                        buttonView.setClickable(false);
-                        pointsValue++;
-                        pointsTextView.setText("Points: " + pointsValue);
-                    } else {
-                        // Reset background color when unchecked
-                        innerLayout.setBackgroundColor(unFinishedTask);
+            Task task = tasks.get(position);
+
+            // Set the initial checked state of the checkbox
+            holder.checkBox.setChecked(task.getChecked());
+
+            // Set up the onCheckedChangeListener for the checkbox
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int currentPosition = holder.getBindingAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    if (currentTask != null) {
+                        // Update the task's completed state in the backend
+                        Task updatedTask = currentTask.copyOfBuilder()
+                                .checked(isChecked)
+                                .build();
+
+                        Amplify.API.mutate(
+                                ModelMutation.update(updatedTask),
+                                response -> {
+                                    Log.i("MyAmplifyApp", "Task successfully updated");
+                                    // Here you could notify your adapter if necessary
+                                },
+                                error -> Log.e("MyAmplifyApp", "Failed to update task", error)
+                        );
+
+                        // Update User's tokens in backend
+                        Amplify.Auth.getCurrentUser(
+                                currentUser -> {
+                                    if (currentUser != null) {
+                                        String userId = currentUser.getUserId();
+                                        Amplify.API.query(
+                                                ModelQuery.get(User.class, userId),
+                                                response -> {
+                                                    if (response.getData() != null) {
+                                                        User user = response.getData();
+                                                        int newTokens = user.getTokens() != null ? user.getTokens() : 0;
+                                                        if (isChecked) {
+                                                            newTokens++;
+                                                        } else if (newTokens > 0) {
+                                                            newTokens--;
+                                                        }
+                                                        User updatedUser = user.copyOfBuilder()
+                                                                .tokens(newTokens)
+                                                                .build();
+                                                        Amplify.API.mutate(
+                                                                ModelMutation.update(updatedUser),
+                                                                response1 -> Log.i("MyAmplifyApp", "User tokens updated"),
+                                                                error -> Log.e("MyAmplifyApp", "Failed to update user tokens", error)
+                                                        );
+                                                    }
+                                                },
+                                                error -> Log.e("MyAmplifyApp", "Query failed", error)
+                                        );
+                                    }
+                                },
+                                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+                        );
+                        // Update the task's checked state and points in the UI
+                        if (isChecked) {
+                            holder.innerLayout.setBackgroundColor(holder.checkboxGreen);
+                            buttonView.setClickable(false);
+                        } else {
+                            holder.innerLayout.setBackgroundColor(holder.unFinishedTask);
+                        }
                     }
                 }
             });
