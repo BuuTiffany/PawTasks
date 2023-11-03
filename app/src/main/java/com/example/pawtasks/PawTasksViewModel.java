@@ -7,7 +7,7 @@ import java.util.HashSet;
 public class PawTasksViewModel extends ViewModel {
 
     // Holds the users token count
-    private int tokenCount = 3;
+    private int tokenCount = 0;
 
     // Holds the users pet index
     private HashSet<Pet> userCollectedPetIndex = new HashSet<>();
@@ -23,9 +23,22 @@ public class PawTasksViewModel extends ViewModel {
         return null; // If the user has no pets
     }
 
+    public HashSet<Pet> getUserCollectedPetIndex() {
+        return userCollectedPetIndex;
+    }
+
     public Pet getPet(Pet wantedPet) {
         for (Pet pet : userCollectedPetIndex) {
             if (pet.equals(wantedPet)) {
+                return pet;
+            }
+        }
+        return null; // If the pet is not found
+    }
+
+    public Pet getPet(String name) {
+        for (Pet pet : userCollectedPetIndex) {
+            if (pet.getPetName().equals(name)) {
                 return pet;
             }
         }

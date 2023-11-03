@@ -5,6 +5,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="NavigationBarColor">#FFDAAE71</color>
+    <color name="SplashScreenBackground">#997C56</color>
 
     <!-- Task Page Colors -->
     <color name="TaskListTextColorBlack">#FF000000</color>

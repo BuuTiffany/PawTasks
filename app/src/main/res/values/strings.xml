@@ -9,7 +9,7 @@
 
     <!-- Gacha Page Strings -->
     <string name="navigation_gacha_title">Gacha</string>
-    <string name="GatchaPageTitle">Gacha</string>
+    <string name="GatchaPageTitle">Adopt A Pet!</string>
     <string name="GachaPullButtonText">PULL</string>
     <string name="GachaTokenLabelText">TOKENS:</string>
     <string name="legendaryPullDialogTitle">LEGENDARY</string>

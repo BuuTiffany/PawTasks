@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DiffUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
@@ -41,6 +41,7 @@ import com.amplifyframework.datastore.generated.model.User;
 
 public class TaskPage extends Fragment {
 
+    private PawTasksViewModel viewModel;
     private RecyclerView tasksView;
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
@@ -60,7 +61,11 @@ public class TaskPage extends Fragment {
         tasksView = view.findViewById(R.id.tasksView_recyclerView);
         taskList = new ArrayList<>();
 
-        taskAdapter = new TaskAdapter(taskList, pointsTextView, this);
+        // Get the tokenCount from the view model
+        viewModel = new ViewModelProvider(requireActivity()).get(PawTasksViewModel.class);
+        pointsTextView.setText("Points: " + String.valueOf(viewModel.getTokenCount()));
+
+        taskAdapter = new TaskAdapter(taskList, pointsTextView);
         tasksView.setAdapter(taskAdapter);
 
 
@@ -259,8 +264,6 @@ public class TaskPage extends Fragment {
 
         private List<Task> tasks;
         private TextView pointsTextView;
-        private TaskPage taskPage;
-        int pointsValue = 0; // variable to keep track of points
 
         public TaskAdapter(List<Task> tasks,TextView pointsTextView, TaskPage taskPage) {
             this.tasks = tasks;
@@ -350,70 +353,20 @@ public class TaskPage extends Fragment {
                     }
                 }
             });
-
-
-            Task task = tasks.get(position);
-
-            // Set the initial checked state of the checkbox
-            holder.checkBox.setChecked(task.getChecked());
-
-            // Set up the onCheckedChangeListener for the checkbox
-            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                int currentPosition = holder.getBindingAdapterPosition();
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    if (currentTask != null) {
-                        // Update the task's completed state in the backend
-                        Task updatedTask = currentTask.copyOfBuilder()
-                                .checked(isChecked)
-                                .build();
-
-                        Amplify.API.mutate(
-                                ModelMutation.update(updatedTask),
-                                response -> {
-                                    Log.i("MyAmplifyApp", "Task successfully updated");
-                                    // Here you could notify your adapter if necessary
-                                },
-                                error -> Log.e("MyAmplifyApp", "Failed to update task", error)
-                        );
-
-                        // Update User's tokens in backend
-                        Amplify.Auth.getCurrentUser(
-                                currentUser -> {
-                                    if (currentUser != null) {
-                                        String userId = currentUser.getUserId();
-                                        Amplify.API.query(
-                                                ModelQuery.get(User.class, userId),
-                                                response -> {
-                                                    if (response.getData() != null) {
-                                                        User user = response.getData();
-                                                        int newTokens = user.getTokens() != null ? user.getTokens() : 0;
-                                                        if (isChecked) {
-                                                            newTokens++;
-                                                        } else if (newTokens > 0) {
-                                                            newTokens--;
-                                                        }
-                                                        User updatedUser = user.copyOfBuilder()
-                                                                .tokens(newTokens)
-                                                                .build();
-                                                        Amplify.API.mutate(
-                                                                ModelMutation.update(updatedUser),
-                                                                response1 -> Log.i("MyAmplifyApp", "User tokens updated"),
-                                                                error -> Log.e("MyAmplifyApp", "Failed to update user tokens", error)
-                                                        );
-                                                    }
-                                                },
-                                                error -> Log.e("MyAmplifyApp", "Query failed", error)
-                                        );
-                                    }
-                                },
-                                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
-                        );
-                        // Update the task's checked state and points in the UI
-                        if (isChecked) {
-                            holder.innerLayout.setBackgroundColor(holder.checkboxGreen);
-                            buttonView.setClickable(false);
-                        } else {
-                            holder.innerLayout.setBackgroundColor(holder.unFinishedTask);
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                int checkboxGreen = getResources().getColor(R.color.CheckboxGreen, null);
+                int unFinishedTask = getResources().getColor(R.color.UnfinishedTask);
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    LinearLayout innerLayout = holder.itemView.findViewById(R.id.innerLayout);
+                    if (isChecked) {
+                        // Change background color when checked
+                        innerLayout.setBackgroundColor(checkboxGreen);
+                        buttonView.setClickable(false);
+                        viewModel.incrementTokenCount();
+                        pointsTextView.setText("Points: " + viewModel.getTokenCount());
+                        if (tasks.get(position).timer != null) {
+                            tasks.get(position).timer.cancel();
                         }
                     }
                 }

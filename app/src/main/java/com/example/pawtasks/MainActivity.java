@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
-    public static int tokenCount = 2;
-
     // View Model
     private PawTasksViewModel viewModel;
 

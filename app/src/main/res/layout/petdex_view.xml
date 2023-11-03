@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/SplashScreenBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Other UI elements or views can go here -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:text="@string/commonPullDialogTitle"/>
+
+        <ImageView
+            android:id="@+id/neeko"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/neekocommon"/>
+
+        <ImageView
+            android:id="@+id/naafiri"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/naafiricommon" />
+
+        <ImageView
+            android:id="@+id/doge"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/doge" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/rarePullDialogTitle"/>
+
+        <ImageView
+            android:id="@+id/sophie"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/rarelab" />
+
+        <ImageView
+            android:id="@+id/checkers"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/checkers" />
+
+        <ImageView
+            android:id="@+id/toffee"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/toffee" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/epicPullDialogTitle"/>
+
+        <ImageView
+            android:id="@+id/shadow"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadowgolden" />
+
+        <ImageView
+            android:id="@+id/oakley"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/oakley" />
+
+        <ImageView
+            android:id="@+id/liberty"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/epicgolden" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/legendaryPullDialogTitle"/>
+
+        <ImageView
+            android:id="@+id/brutus"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/legendarypuppy" />
+
+        <Button
+            android:id="@+id/petdexOk_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/commonDialogButtonText"
+            />
+    </LinearLayout>
+</ScrollView>
