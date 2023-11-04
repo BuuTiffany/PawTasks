@@ -1,0 +1,19 @@
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  email: String!
+  username: String
+  bio: String
+  tokens: Int
+  avatar: String
+  pets: [String]
+  Tasks: [Task] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Task @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String
+  finishByTime: String
+  checked: Boolean
+  date: String
+  userID: ID! @index(name: "byUser")
+}
