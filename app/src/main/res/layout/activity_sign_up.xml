@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#997C56">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,23 +14,26 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_launcher_foreground" /> <!-- Replace with your app's logo -->
+            android:src="@drawable/pawtasksplash" /> <!-- Replace with your app's logo -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#000">
 
             <EditText
                 android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:hint="Email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:background="#fff" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -37,14 +41,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:errorEnabled="true"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            android:textColorHint="#000">
 
             <EditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:background="#fff" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ProgressBar
@@ -60,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/AddButton"
+            android:backgroundTint="#765F4B"
             android:text="Sign Up"
             android:textColor="@android:color/white" />
     </LinearLayout>

@@ -14,6 +14,7 @@ public class ConfirmSignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         binding = ActivityConfirmSignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

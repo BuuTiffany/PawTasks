@@ -26,9 +26,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignUpActivity"/>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".ConfirmSignUpActivity" />
+        <activity android:name=".SignUpActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".SignInActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ConfirmSignUpActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
