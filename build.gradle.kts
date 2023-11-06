@@ -10,5 +10,6 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.1.1")
+        classpath("com.amplifyframework:amplify-tools-gradle-plugin:0.2.+")
     }
 }

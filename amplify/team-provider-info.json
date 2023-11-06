@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pawtasks-dev-225924-authRole",
+      "UnauthRoleArn": "arn:aws:iam::516729456498:role/amplify-pawtasks-dev-225924-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::516729456498:role/amplify-pawtasks-dev-225924-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-pawtasks-dev-225924-deployment",
+      "UnauthRoleName": "amplify-pawtasks-dev-225924-unauthRole",
+      "StackName": "amplify-pawtasks-dev-225924",
+      "StackId": "arn:aws:cloudformation:us-west-1:516729456498:stack/amplify-pawtasks-dev-225924/d27decb0-6f0d-11ee-a57f-06ebaa41f37b",
+      "AmplifyAppId": "d2i9wakjrsxt2h"
+    },
+    "categories": {
+      "auth": {
+        "pawtasksad5731c2": {}
+      },
+      "api": {
+        "PawTasks": {}
+      }
+    }
+  }
+}

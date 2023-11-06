@@ -1,0 +1,16 @@
+{
+  "projectName": "PawTasks",
+  "version": "3.1",
+  "frontend": "android",
+  "android": {
+    "config": {
+      "ResDir": "app/src/main/res",
+      "SourceDir": "app/src/main/java",
+      "ManifestDir": "app/src/main",
+      "Package": "com.example.pawtasks"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}

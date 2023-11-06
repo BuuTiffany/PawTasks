@@ -5,4 +5,7 @@
         <item name="android:textColorPrimary">#FF4081</item> <!-- Title color -->
         <item name="android:background">#FFFFFF</item> <!-- Background color -->
     </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/status_bar_brown</item>
+    </style>
 </resources>

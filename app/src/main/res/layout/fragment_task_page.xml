@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/TaskViewBackgroundColor"
-    tools:context=".TaskPage"
-    >
+    tools:context=".TaskPage">
 
+    <!-- Top Header Layout -->
     <LinearLayout
+        android:id="@+id/first_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
@@ -18,49 +19,57 @@
         android:background="@color/white">
 
         <!-- PawTasks TextView -->
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/tokens"
+            android:layout_marginEnd="8dp"
+            android:gravity="start" />
+
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/pointsTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="PawTasks"
+            android:text="Tokens: 0"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:gravity="start"/>
 
+        <ImageView
+            android:id="@+id/refresh_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/refresh"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/menu_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/menu"
-            android:layout_marginEnd="8dp"
-            />
+            android:layout_marginEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/signout_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/signout"
+            android:layout_marginEnd="8dp" />
     </LinearLayout>
 
+    <!-- RecyclerView for Tasks -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksView_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_below="@id/first_linear_layout"
+        android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:nestedScrollingEnabled="true"
         android:layout_marginBottom="60dp"
-        />
+        android:nestedScrollingEnabled="true" />
 
-    <TextView
-        android:id="@+id/pointsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Points: 0"
-        android:background="@drawable/layout_boarder"
-        android:padding = "10dp"
-        android:backgroundTint="@color/pointsContainer"
-        android:textColor="@color/pointsColor"
-        android:textSize="18sp"
-        android:layout_below="@+id/tasksView_recyclerView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"/>
-
+    <!-- Bottom Layout for Adding Tasks -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,34 +78,29 @@
         android:background="#CCCCCC"
         android:layout_alignParentBottom="true">
 
-    <Button
-        android:id="@+id/addTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:backgroundTint="@color/AddButton"
-        android:textColor="@color/black"
-        android:text="Add Task"/>
+        <Button
+            android:id="@+id/addTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="@color/AddButton"
+            android:textColor="@color/black"
+            android:text="Add Task" />
 
-    <EditText
-        android:id="@+id/taskInputEditText"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="13dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/addTaskButton"
-        android:ems="10"
-        android:inputType="text"
-        android:background="@drawable/layout_boarder"
-        android:hint="New Task"
-        android:padding="5dp"
-        />
-</LinearLayout>
+        <EditText
+            android:id="@+id/taskInputEditText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:background="@drawable/layout_boarder"
+            android:hint="New Task"
+            android:padding="5dp" />
+    </LinearLayout>
 
 </RelativeLayout>
