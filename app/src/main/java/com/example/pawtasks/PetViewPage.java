@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.User;
 
 
 public class PetViewPage extends Fragment implements View.OnClickListener {
@@ -46,7 +52,9 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
 
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
-        tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+        //tokenCountLabel.setText(getString(R.string.loading));
+
+        fetchAndSetUserTokens();
 
         // Set image view
         currentPet = viewModel.getFirstPet();
@@ -82,6 +90,43 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
         return inf;
+    }
+
+    private void fetchAndSetUserTokens() {
+
+        Amplify.Auth.getCurrentUser(
+                currentUser -> {
+                    if (currentUser != null) {
+                        String userId = currentUser.getUserId();
+                        Amplify.API.query(
+                                ModelQuery.get(User.class, userId),
+                                response -> {
+                                    if (response.getData() != null) {
+                                        User user = response.getData();
+                                        int tokens = user.getTokens() != null ? user.getTokens() : 0;
+
+                                        // Since the query runs on a background thread, you need to run UI updates on the main thread
+                                        getActivity().runOnUiThread(() -> {
+                                            viewModel.setTokenCount(tokens); // Update your viewModel with the fetched token count
+                                            tokenCountLabel.setText(String.valueOf(tokens)); // Update the label with the fetched token count
+
+                                            // Enable or disable buttons based on the token count
+                                            boolean hasTokens = tokens > 0;
+                                            walkButton.setEnabled(hasTokens);
+                                            danceButton.setEnabled(hasTokens);
+                                            feedButton.setEnabled(hasTokens);
+                                            sitStandButton.setEnabled(true);
+
+                                        });
+                                    }
+                                },
+                                error -> Log.e("PetViewPage", "Failed to fetch user tokens", error)
+                        );
+                    }
+
+                },
+                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+        );
     }
 
     private void showPetdexModal() {
@@ -197,6 +242,32 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
                 viewModel.decrementTokenCount();
                 tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
                 noTokens = (viewModel.getTokenCount() == 0);
+
+                Amplify.Auth.getCurrentUser(
+                        currentUser -> {
+                            if (currentUser != null) {
+                                String userId = currentUser.getUserId();
+                Amplify.API.query(
+                        ModelQuery.get(User.class, userId),
+                        response -> {
+                            if (response.getData() != null) {
+                                User user = response.getData();
+                                User updatedUser = user.copyOfBuilder()
+                                        .tokens(viewModel.getTokenCount())
+                                        .build();
+                                Amplify.API.mutate(
+                                        ModelMutation.update(updatedUser),
+                                        response1 -> Log.i("PetViewPage", "User tokens updated"),
+                                        error -> Log.e("PetViewPage", "Failed to update user tokens", error)
+                                );
+                            }
+                        },
+                        error -> Log.e("PetViewPage", "Query failed", error)
+                );
+                            }
+                        },
+                        error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+                );
             }
         }
 
@@ -207,6 +278,33 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
                 viewModel.decrementTokenCount();
                 tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
                 noTokens = (viewModel.getTokenCount() == 0);
+
+                Amplify.Auth.getCurrentUser(
+                        currentUser -> {
+                            if (currentUser != null) {
+                                String userId = currentUser.getUserId();
+                                Amplify.API.query(
+                                        ModelQuery.get(User.class, userId),
+                                        response -> {
+                                            if (response.getData() != null) {
+                                                User user = response.getData();
+                                                User updatedUser = user.copyOfBuilder()
+                                                        .tokens(viewModel.getTokenCount())
+                                                        .build();
+                                                Amplify.API.mutate(
+                                                        ModelMutation.update(updatedUser),
+                                                        response1 -> Log.i("PetViewPage", "User tokens updated"),
+                                                        error -> Log.e("PetViewPage", "Failed to update user tokens", error)
+                                                );
+                                            }
+                                        },
+                                        error -> Log.e("PetViewPage", "Query failed", error)
+                                );
+                            }
+
+                        },
+                        error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+                );
             }
         }
 
@@ -217,6 +315,32 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
                 viewModel.decrementTokenCount();
                 tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
                 noTokens = (viewModel.getTokenCount() == 0);
+
+                Amplify.Auth.getCurrentUser(
+                        currentUser -> {
+                            if (currentUser != null) {
+                                String userId = currentUser.getUserId();
+                Amplify.API.query(
+                        ModelQuery.get(User.class, userId),
+                        response -> {
+                            if (response.getData() != null) {
+                                User user = response.getData();
+                                User updatedUser = user.copyOfBuilder()
+                                        .tokens(viewModel.getTokenCount())
+                                        .build();
+                                Amplify.API.mutate(
+                                        ModelMutation.update(updatedUser),
+                                        response1 -> Log.i("PetViewPage", "User tokens updated"),
+                                        error -> Log.e("PetViewPage", "Failed to update user tokens", error)
+                                );
+                            }
+                        },
+                        error -> Log.e("PetViewPage", "Query failed", error)
+                );
+                            }
+                        },
+                        error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+                );
             }
         }
 

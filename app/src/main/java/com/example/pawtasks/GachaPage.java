@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.User;
 
 public class GachaPage extends Fragment implements View.OnClickListener {
 
@@ -54,9 +60,34 @@ public class GachaPage extends Fragment implements View.OnClickListener {
 
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.gachaTokenCount_text);
-        tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+        //tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+
+        fetchUserTokenCount();
 
         return inf;
+    }
+
+    private void fetchUserTokenCount() {
+        String userId = "b2889e70-7f5c-4ab8-8121-ee90af3459c9"; // Replace with actual logic to retrieve current user's ID
+        Amplify.API.query(
+                ModelQuery.get(User.class, userId),
+                response -> {
+                    if(response.getData() != null) {
+                        // Assuming 'User' class has a 'getTokens()' method.
+                        int tokenCount = response.getData().getTokens();
+                        getActivity().runOnUiThread(() -> {
+                            viewModel.setTokenCount(tokenCount); // You need to implement setTokenCount in your viewModel
+                            tokenCountLabel.setText(String.valueOf(tokenCount));
+                            if (tokenCount > 0) {
+                                pullButton.setEnabled(true);
+                            } else {
+                                pullButton.setEnabled(false);
+                            }
+                        });
+                    }
+                },
+                error -> Log.e("GachaPage", "Query failure", error)
+        );
     }
 
     @Override
@@ -80,17 +111,44 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         {
             // Pull from gacha machine if token count > 0
             if (viewModel.getTokenCount() > 0) {
-                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount() - 1));
                 Pet adoptedPet = gachaMachine.pull();
                 showPull(adoptedPet);
                 viewModel.addPet(adoptedPet);
                 viewModel.decrementTokenCount();
+                tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
             }
             // Check if tokenCount becomes 0
             if (viewModel.getTokenCount() == 0)
             {
                 pullButton.setEnabled(false);
             }
+
+            Amplify.Auth.getCurrentUser(
+                    currentUser -> {
+                        if (currentUser != null) {
+                            String userId = currentUser.getUserId();
+                            Amplify.API.query(
+                    ModelQuery.get(User.class, userId),
+                    response -> {
+                        if (response.getData() != null) {
+                            User user = response.getData();
+                            // Assuming you have decremented the local token count already
+                            User updatedUser = user.copyOfBuilder()
+                                    .tokens(viewModel.getTokenCount())
+                                    .build();
+                            Amplify.API.mutate(
+                                    ModelMutation.update(updatedUser),
+                                    response1 -> Log.i("GachaPage", "User tokens updated"),
+                                    error -> Log.e("GachaPage", "Failed to update user tokens", error)
+                            );
+                        }
+                    },
+                    error -> Log.e("GachaPage", "Query failed", error)
+            );
+                        }
+                    },
+                    error -> Log.e("MyAmplifyApp", "Get current user failed", error)
+            );
         }
     }
 
