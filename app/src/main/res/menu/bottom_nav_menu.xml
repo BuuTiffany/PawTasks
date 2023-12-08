@@ -11,5 +11,5 @@
     <item
         android:id="@+id/pet"
         android:title=""
-        android:icon="@drawable/dognavicon"/>
+        android:icon="@drawable/dognavicon" />
 </menu>

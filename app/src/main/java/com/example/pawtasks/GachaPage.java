@@ -2,8 +2,10 @@ package com.example.pawtasks;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
@@ -43,8 +46,8 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         viewModel = new ViewModelProvider(requireActivity()).get(PawTasksViewModel.class);
 
         // For adding tokens
-        addTokenButton = (Button) inf.findViewById(R.id.addTokens_button);
-        addTokenButton.setOnClickListener(this);
+//        addTokenButton = (Button) inf.findViewById(R.id.addTokens_button);
+//        addTokenButton.setOnClickListener(this);
 
         // For pulling dogs
         pullButton = (Button) inf.findViewById(R.id.gachaPull_button);
@@ -63,6 +66,12 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         //tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
         fetchUserTokenCount();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.inAppStatusBar));
+        }
 
         return inf;
     }
@@ -94,20 +103,20 @@ public class GachaPage extends Fragment implements View.OnClickListener {
     public void onClick(View v)
     {
         // Add token button click activity
-        if (v.getId() == R.id.addTokens_button)
-        {
-            viewModel.incrementTokenCount();
-            tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
-
-            // Check if tokenCount exceeds 0
-            if (viewModel.getTokenCount() > 0)
-            {
-                pullButton.setEnabled(true);
-            }
-        }
+//        if (v.getId() == R.id.addTokens_button)
+//        {
+//            viewModel.incrementTokenCount();
+//            tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+//
+//            // Check if tokenCount exceeds 0
+//            if (viewModel.getTokenCount() > 0)
+//            {
+//                pullButton.setEnabled(true);
+//            }
+//        }
 
         // Pull button click activity
-        else if (v.getId() == R.id.gachaPull_button)
+        if (v.getId() == R.id.gachaPull_button)
         {
             // Pull from gacha machine if token count > 0
             if (viewModel.getTokenCount() > 0) {

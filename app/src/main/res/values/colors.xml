@@ -20,6 +20,7 @@
     <color name="custom_green">#3D974E</color>
     <color name="custom_red">#CE2F19</color>
     <color name="status_bar_brown">#997C56</color>
+    <color name="inAppStatusBar">#A55814</color>
 
     <!-- Gacha Page Colors -->
     <color name="GachaPageTitleColorBlack">#FF000000</color>

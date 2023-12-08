@@ -3,8 +3,10 @@ package com.example.pawtasks;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
@@ -88,6 +91,12 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
         tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.inAppStatusBar));
+        }
 
         return inf;
     }

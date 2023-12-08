@@ -58,12 +58,42 @@
             android:layout_marginEnd="8dp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/usernameContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/first_linear_layout"
+        android:layout_marginTop="5dp">
+
+    <!-- ImageView to display the image -->
+    <ImageView
+        android:id="@+id/userImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/avatar_2" />
+
+    <!-- TextView for the username greeting -->
+    <TextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="27sp"
+        android:text="Hello, Rami!"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="10dp" />
+
+</LinearLayout>
+
     <!-- RecyclerView for Tasks -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksView_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/first_linear_layout"
+        android:layout_below="@id/usernameContainer"
         android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginBottom="60dp"
@@ -81,17 +111,18 @@
         <Button
             android:id="@+id/addTaskButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:backgroundTint="@color/AddButton"
             android:textColor="@color/black"
-            android:text="Add Task" />
+            android:text="Add Task"
+            android:gravity="center_vertical"/>
 
         <EditText
             android:id="@+id/taskInputEditText"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="13dp"
             android:layout_marginEnd="24dp"
@@ -100,7 +131,8 @@
             android:inputType="text"
             android:background="@drawable/layout_boarder"
             android:hint="New Task"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:gravity="center_vertical"/>
     </LinearLayout>
 
 </RelativeLayout>
