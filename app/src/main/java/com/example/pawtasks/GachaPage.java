@@ -93,7 +93,10 @@ public class GachaPage extends Fragment implements View.OnClickListener {
     }
 
     private void fetchUserTokenCount() {
-        String userId = "b2889e70-7f5c-4ab8-8121-ee90af3459c9"; // Replace with actual logic to retrieve current user's ID
+        Amplify.Auth.getCurrentUser(
+                currentUser -> {
+                    if (currentUser != null) {
+                        String userId = currentUser.getUserId();
         Amplify.API.query(
                 ModelQuery.get(User.class, userId),
                 response -> {
@@ -112,6 +115,10 @@ public class GachaPage extends Fragment implements View.OnClickListener {
                     }
                 },
                 error -> Log.e("GachaPage", "Query failure", error)
+        );
+                    }
+                },
+                error -> Log.e("MyAmplifyApp", "Get current user failed", error)
         );
     }
 
