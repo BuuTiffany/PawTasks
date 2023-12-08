@@ -24,6 +24,8 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.User;
 
+import java.util.Random;
+
 public class GachaPage extends Fragment implements View.OnClickListener {
 
     private TextView tokenCountLabel;
@@ -31,6 +33,8 @@ public class GachaPage extends Fragment implements View.OnClickListener {
     private Button pullButton;
     private GachaMachine gachaMachine = new GachaMachine();
     private PawTasksViewModel viewModel;
+    private ImageView RightImage;
+    private ImageView LeftImage;
 
     public GachaPage() {
         // Required empty public constructor
@@ -52,6 +56,8 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         // For pulling dogs
         pullButton = (Button) inf.findViewById(R.id.gachaPull_button);
         pullButton.setOnClickListener(this);
+        RightImage = inf.findViewById(R.id.RightImage);
+        LeftImage = inf.findViewById(R.id.LeftImage);
 
         // Enable the Pull Button if tokenCount > 0
         if (viewModel.getTokenCount() > 0)
@@ -66,6 +72,16 @@ public class GachaPage extends Fragment implements View.OnClickListener {
         //tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
 
         fetchUserTokenCount();
+
+        int randomNumber1 = new Random().nextInt(30) + 1;
+        String avatarResourceName = "avatar_" + randomNumber1;
+        int resourceId = getResources().getIdentifier(avatarResourceName, "drawable", getActivity().getPackageName());
+        RightImage.setImageResource(resourceId);
+
+        int randomNumber2 = new Random().nextInt(30) + 1;
+        String avatarResourceName2 = "avatar_" + randomNumber2;
+        int resourceId2 = getResources().getIdentifier(avatarResourceName2, "drawable", getActivity().getPackageName());
+        LeftImage.setImageResource(resourceId2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getActivity().getWindow();

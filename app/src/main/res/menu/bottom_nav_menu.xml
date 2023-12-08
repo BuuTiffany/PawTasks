@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/tasks"
-        android:title=""
+        android:title="Tasks"
         android:icon="@drawable/notepadnav" />
     <item
         android:id="@+id/gacha"
-        android:title=""
+        android:title="Gacha"
         android:icon="@drawable/gachamachine"/>
     <item
         android:id="@+id/pet"
-        android:title=""
+        android:title="Pets"
         android:icon="@drawable/dognavicon" />
 </menu>

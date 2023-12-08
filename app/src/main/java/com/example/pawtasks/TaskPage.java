@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 import com.amplifyframework.core.model.query.Where;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -52,6 +53,7 @@ public class TaskPage extends Fragment {
     private TextView pointsTextView;
     private TextView usernameTextView;
     private int userTokens = 0;
+    private ImageView avatar;
     public TaskPage() {
         // Required empty public constructor
     }
@@ -65,6 +67,7 @@ public class TaskPage extends Fragment {
         tasksView = view.findViewById(R.id.tasksView_recyclerView);
         taskList = new ArrayList<>();
         usernameTextView = view.findViewById(R.id.usernameTextView);
+        avatar = view.findViewById(R.id.userImage);
 
         taskAdapter = new TaskAdapter(taskList, pointsTextView, this);
         tasksView.setAdapter(taskAdapter);
@@ -165,6 +168,11 @@ public class TaskPage extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.inAppStatusBar));
         }
+
+        int randomNumber = new Random().nextInt(30) + 1;
+        String avatarResourceName = "avatar_" + randomNumber;
+        int resourceId = getResources().getIdentifier(avatarResourceName, "drawable", getActivity().getPackageName());
+        avatar.setImageResource(resourceId);
 
         queryCurrentUser();
         queryTasks();

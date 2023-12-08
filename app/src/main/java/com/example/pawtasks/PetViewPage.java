@@ -27,6 +27,8 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.User;
 
+import java.util.Random;
+
 
 public class PetViewPage extends Fragment implements View.OnClickListener {
 
@@ -40,6 +42,7 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
     private ImageView petdexButton;
     private Pet currentPet;
 
+    private ImageView avatar;
     public PetViewPage() {
         // Required empty public constructor
     }
@@ -52,6 +55,8 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
 
         // Get the token count
         viewModel = new ViewModelProvider(requireActivity()).get(PawTasksViewModel.class);
+
+        avatar = inf.findViewById(R.id.avatar);
 
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
@@ -91,6 +96,11 @@ public class PetViewPage extends Fragment implements View.OnClickListener {
         // Set TokenCount label
         tokenCountLabel = (TextView) inf.findViewById(R.id.petTokenCount_text);
         tokenCountLabel.setText(String.valueOf(viewModel.getTokenCount()));
+
+        int randomNumber2 = new Random().nextInt(30) + 1;
+        String avatarResourceName2 = "avatar_" + randomNumber2;
+        int resourceId2 = getResources().getIdentifier(avatarResourceName2, "drawable", getActivity().getPackageName());
+        avatar.setImageResource(resourceId2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getActivity().getWindow();
